@@ -791,7 +791,8 @@
     abort: function() {
       return CurrentTargetPath = null;
     },
-    listen: function() {
+    listen: function(preventChange) {
+      preventChange = preventChange || false;
       if (!HashListening) {
         if ("onhashchange" in window) {
           if (isFunction(window.addEventListener)) {
@@ -806,7 +807,11 @@
           HashInterval = setInterval(hashChangeListener, 33);
           HashListening = true;
         }
-        hashChangeListener();
+        if (preventChange) {
+          CurrentHash = getHash();
+        } else {
+          hashChangeListener();
+        }
       }
       return HashListening;
     },
